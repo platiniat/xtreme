@@ -1,0 +1,94 @@
+{% extends 'core/base_investidor_area.html' %}
+{% load static %}
+
+{% block main %}
+
+<h6 class="text-dark mb-4">Investimento de Cartão de {{ investimento.cliente.nome }}: R$ {{ investimento.valor_formatado }}</h6>
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p style="color:#ae6b3b;margin-bottom:0px;"> <strong>PRESTAÇÕES </strong> ({{ investimento.maquineta_detail }})</p>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                <table style="font-size:14px;" class="table my-0" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>Nº</th>
+                            <th>Data vencimento</th>
+                            <th>Data pagamento</th>
+                            <th>Valor</th>
+                            <th>PG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in investimento.prestacoes_lista %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ p.data_vencimento|date:"d/m/Y" }}</td>
+                                <td>{{ p.data_pagamento|date:"d/m/Y" }}</td>
+                                <td>R$ {{ p.valor_formatado }}</td>
+                                <td>
+                                    {% if not p.pago %}
+                                        -
+                                    {% else %}
+                                        Pago
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="9">Nenhum investimento de cartão encontrado. </td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow" style="margin-top:30px;">
+        <div class="card-header py-3">
+            <p style="color:green;margin-bottom:0px;"> <strong>RENDIMENTOS </strong> (R$ {{ investimento.rendimentos }})</p>
+        </div>
+        <div class="card-body">
+            {% if tem_rendimentos %}
+                <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                    <table style="font-size:14px;" class="table my-0" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>Nº</th>
+                                <th>Data</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in investimento.rendimentos_lista %}
+                                <tr>
+                                    <td style="color:{{ r.status.1 }};"><strong>{{ forloop.counter }}</strong></td>
+                                    <td style="color:{{ r.status.1 }};"><strong>{{ r.data|date:"m/Y" }}</strong></td>
+                                    <td style="color:{{ r.status.1 }};"><strong>R$ {{ r.valor_formatado }}</strong></td>
+                                    <td style="color:{{ r.status.1 }};"><strong>{{ r.status.0 }}</strong></td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="4">Sem rendimentos. </td>
+                                </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                Sem rendimentos
+            {% endif %}
+        </div>
+    </div>
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body"><a href="{% url 'cartao_investidor_list' %}" class="btn btn-secondary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span><span class="text-white text">VOLTAR</span></a></div>
+    </div>
+
+{% endblock %}

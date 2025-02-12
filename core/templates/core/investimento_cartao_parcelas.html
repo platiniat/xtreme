@@ -1,0 +1,80 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+
+<h6 class="text-dark mb-4">Investimento de Cartão de {{ investimento.cliente.nome }}: R$ {{ investimento.valor_real_formatado }}</h6>
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p style="color:#ae6b3b;margin-bottom:0px;"> <strong>PRESTAÇÕES </strong></p>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                <table style="font-size:14px;" class="table my-0" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>Nº</th>
+                            <th>Data vencimento</th>
+                            <th>Data pagamento</th>
+                            <th>Valor</th>
+                            <th>Autorizou invest.</th>
+                            <th>Realizou PG</th>
+                            <th>Cancelou PG</th>
+                            <th>PG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in investimento.parcelas %}
+                            <tr>
+                                <td>
+                                    {% if not p.pago %}
+                                        {{ forloop.counter }}
+                                    {% else %}
+                                    <span style="color:white;background:green;border-radius:3px;padding-left:5px;padding-right:5px;"> <strong>{{ forloop.counter }}</strong></span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ p.data|date:"d/m/Y" }}</td>
+                                <td>{{ p.data_pagamento|date:"d/m/Y" }}</td>
+                                <td>R$ {{ p.valor_formatado }}</td>
+                                <td>
+                                    {% if p.autorizador %}
+                                        {{ p.autorizador }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if p.confirmador_pagamento %}
+                                        {{ p.confirmador_pagamento }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if p.cancelador_pagamento %}
+                                        {{ p.cancelador_pagamento }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if not p.pago %}
+                                        <a href="{% url 'investimento_cartao_pagar_prestacao' p.pk %}" class="btn btn-success btn-icon-split" role="button" style="font-size: 12px;"><span class="text-white-50 icon"><i class="fas fa-money"></i></span><span class="text-white text">PAGAR</span></a>
+                                    {% else %}
+                                        <a href="{% url 'investimento_cartao_cancelar_prestacao' p.pk %}" class="btn btn-secondary btn-icon-split" role="button" style="font-size: 12px;"><span class="text-white-50 icon"><i class="fas fa-close"></i></span><span class="text-white text">CANCELAR</span></a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="9">Nenhum investimento de cartão encontrado. </td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body"><a href="{% url 'periodo_dinheiro_list' periodo.pk %}" class="btn btn-secondary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span><span class="text-white text">VOLTAR</span></a></div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="card shadow">
+        <div class="card-header py-3">
+            {% if retirada.autorizado %}
+                <p class="text-danger m-0 fw-bold">Tem certeza que deseja excluir esta retirada?</p>
+            {% else %}
+                <p class="text-danger m-0 fw-bold">Tem certeza que deseja excluir esta solicitação de retirada?</p>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+
+                <!-- Exibe os detalhes do investimento -->
+                <p><strong>Cliente:</strong> {{ retirada.periodo.cliente.nome }}</p>
+                <p><strong>Valor:</strong> R$ {{ retirada.valor_formatado }}</p>
+                {% if retirada.data %}
+                    <p><strong>Data:</strong> {{ retirada.data }}</p>
+                {% endif %}
+                {% if retirada.data_solicitacao %}
+                    <p><strong>Data da solicitação:</strong> {{ retirada.data_solicitacao }}</p>
+                {% endif %}
+
+                <!-- Campo para digitar a senha -->
+                <div class="mb-3">
+                    <label for="senha" class="form-label">Digite sua senha para confirmar a exclusão:</label>
+                    <input type="password" class="form-control" id="senha" name="senha" required>
+                </div>
+
+                <!-- Botão para confirmar a exclusão -->
+                <button type="submit" class="btn btn-danger btn-icon-split">
+                    <span class="text-white-50 icon"><i class="fas fa-trash"></i></span>
+                    <span class="text-white text">Excluir</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow" style="margin-top: 30px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body">
+            <a href="#" class="btn btn-secondary btn-icon-split" role="button">
+                <span class="text-white-50 icon"><i class="fa fa-arrow-circle-left"></i></span>
+                <span class="text-white text">VOLTAR</span>
+            </a>
+        </div>
+    </div>
+{% endblock %}

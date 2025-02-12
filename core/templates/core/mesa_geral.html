@@ -1,0 +1,58 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="card shadow">
+        <div class="card-body">
+            <div style="width: 100%;max-width: 600px;display: inline-block;">
+                <h4>{{ conta.cliente.nome}}</h4>
+                <p style="margin: 0;font-size: 14px;">Conta: {{conta.numero}}</p>
+                <p style="margin: 0;font-size: 14px;">Abertura: {{conta.data_abertura}}</p>
+            </div>
+            <div style="width: 100%;max-width: 200px;display: inline-block;float: right;">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">CARTEIRA</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'mesa_geral' conta.pk %}">GERAL</a>
+                        <a class="dropdown-item" href="{% url 'mesa_dinheiro' conta.pk %}">DINHEIRO</a>
+                        <a class="dropdown-item" href="{% url 'investimento_cartao' conta.pk %}">CARTÃO</a>
+                        <a class="dropdown-item" href="#">ALAVANCAGEM</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">GERAL</p>
+        </div>
+        <div class="card-body" style="background: #172452;">
+            <div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation"><a class="nav-link active" role="tab" data-bs-toggle="tab" href="#tab-1" style="color: white;background: #172452;">DASHBOARD</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" role="tabpanel" id="tab-1">
+                        <div style="padding: 10px;background: white;margin-top: 20px;border-radius: 5px;text-align: center;">
+                            <div style="width: 100%;max-width: 350px;display: inline-block;margin: 10px;"><span>MESA</span>
+                                <div class="chart-area"><canvas data-bss-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Cartão&quot;,&quot;Dinheiro&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;70&quot;,&quot;30&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:true,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;},&quot;position&quot;:&quot;bottom&quot;},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}}}"></canvas></div>
+                            </div>
+                            <div style="width: 100%;max-width: 350px;display: inline-block;margin: 10px;"><span>RENDIMENTOS</span>
+                                <div class="chart-area"><canvas data-bss-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Cartão&quot;,&quot;Dinheiro&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;20&quot;,&quot;80&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:true,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;},&quot;position&quot;:&quot;bottom&quot;},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}}}"></canvas></div>
+                            </div>
+                            <div style="width: 100%;margin: 10px;margin-top: 30px;"><span>MESA NO ANO DE 2024</span>
+                                <div class="chart-area"><canvas data-bss-chart="{&quot;type&quot;:&quot;bar&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Janeiro&quot;,&quot;Fevereiro&quot;,&quot;Março&quot;,&quot;Abril&quot;,&quot;Maio&quot;,&quot;Junho&quot;,&quot;Julho&quot;,&quot;Agosto&quot;,&quot;Setembro&quot;,&quot;Outubro&quot;,&quot;Novembro&quot;,&quot;Dezembro&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;borderColor&quot;:&quot;#ffffff&quot;,&quot;data&quot;:[&quot;100000&quot;,&quot;110000&quot;,&quot;125000&quot;,&quot;120000&quot;,&quot;135000&quot;,&quot;155000&quot;,&quot;150000&quot;,&quot;110000&quot;,&quot;150000&quot;,&quot;158000&quot;,&quot;170000&quot;,&quot;185000&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false,&quot;labels&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;}},&quot;title&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;},&quot;scales&quot;:{&quot;xAxes&quot;:[{&quot;ticks&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;,&quot;beginAtZero&quot;:true}}],&quot;yAxes&quot;:[{&quot;ticks&quot;:{&quot;fontStyle&quot;:&quot;normal&quot;,&quot;beginAtZero&quot;:true}}]}}}"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body"><a class="btn btn-secondary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span><span class="text-white text">CANCELAR</span></a></div>
+    </div>
+{% endblock %}

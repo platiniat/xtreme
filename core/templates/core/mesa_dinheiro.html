@@ -1,0 +1,327 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="card shadow">
+        <div class="card-body">
+            <div style="width: 100%;max-width: 600px;display: inline-block;">
+                <h4>{{ conta.cliente.nome}}</h4>
+                <p style="margin: 0;font-size: 14px;">Conta: {{conta.numero}}</p>
+                <p style="margin: 0;font-size: 14px;">Abertura: {{conta.data_abertura}}</p>
+            </div>
+            <div style="width: 100%;max-width: 200px;display: inline-block;float: right;">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">CARTEIRA</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">GERAL</a>
+                        <a class="dropdown-item" href="#">DINHEIRO</a>
+                        <a class="dropdown-item" href="#">CARTÃO</a>
+                        <a class="dropdown-item" href="#">ALAVANCAGEM</a>
+                    </div>
+                </div>
+            </div>
+            {% if conta.mesa_dinheiro_aberta %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <tbody>
+                            <tr style="background: gray;font-size:14px;">
+                                <td style="background: #a0a0a0;color: white;">Data Início</td>
+                                <td style="background: #a0a0a0;color: white;"><strong>Data Fim</strong></td>
+                                <td style="background: #a0a0a0;color: white;"><strong>Valor Inicial</strong></td>
+                                <td style="background: #a0a0a0;color: white;"><strong>Aportes</strong></td>
+                                <td style="background: #a0a0a0;color: white;"><strong>Saques</strong></td>
+                                <td style="background: #a0a0a0;color: white;"><strong>Total Entradas</strong></td>
+                                <td style="background: #a0a0a0;color: white;"><strong>Total Saidas</strong></td>
+                                <td style="background: #a0a0a0;color: white;"><strong>Rend. valor inicial</strong></td>
+                                <td style="background: #a0a0a0;color: white;"><strong>Rend. aportes</strong></td>
+                                <td style="background: #a0a0a0;color: white;"><strong>Rend. total</strong></td>
+                                <td style="background: #a0a0a0;color: white;"><strong>Saldo final</strong></td>
+                            </tr>
+                            <tr style="font-size:13px;">
+                                <td>{{ conta.mesa_dinheiro_aberta.data_inicio }}</td>
+                                <td>{{ conta.mesa_dinheiro_aberta.data_fim }}</td>
+                                <td>R$ {{ conta.mesa_dinheiro_aberta.valor_inicial_investido }}</td>
+                                <td>R$ {{ conta.mesa_dinheiro_aberta.aportes }}</td>
+                                <td>R$ {{ conta.mesa_dinheiro_aberta.saques }}</td>
+                                <td>R$ {{ conta.mesa_dinheiro_aberta.entradas }}</td>
+                                <td>R$ {{ conta.mesa_dinheiro_aberta.saques }}</td>
+                                <td>R$ {{ conta.mesa_dinheiro_aberta.rendimento_valor_inicial_investido }} ({{conta.mesa_dinheiro_aberta.percentual_rendimento}}%)</td>
+                                <td>R$ {{ conta.mesa_dinheiro_aberta.rendimento_aportes }}</td>
+                                <td>R$ {{ conta.mesa_dinheiro_aberta.rendimento_total }}</td>
+                                <td>R$ {{ conta.mesa_dinheiro_aberta.saldo_final }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <!-- Formulário para abrir uma nova mesa de dinheiro -->
+                <h2>Abra uma Nova Mesa de Dinheiro</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <div style="margin-bottom:10px;">
+                        <label for="data_inicio">Data de Início:</label>
+                        <input class="form-control" type="date" id="data_inicio" name="data_inicio" required>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <label for="data_fim">Data de Fim:</label>
+                        <input class="form-control" type="date" id="data_fim" name="data_fim" required>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <label for="valor_reinvestir">Valor Inicial:</label>
+                        <input class="form-control" type="number" id="valor_reinvestir" name="valor_reinvestir" step="0.01" required>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <label for="porcentagem_rendimento">Porcentagem de Rendimento:</label>
+                        <input class="form-control" type="number" id="porcentagem_rendimento" name="porcentagem_rendimento" step="0.01" required>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-icon-split"  style="margin-top:20px;"><span class="text-white-50 icon"><i class="fas fa-plus"></i></span><span class="text-white text">ABRIR MESA</span></button>
+
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">DINHEIRO
+                {% if conta.mesa_dinheiro_aberta %}
+                    <a href="{% url 'mesa_dinheiro_edit' conta.mesa_dinheiro_aberta.pk %}" class="btn btn-warning btn-icon-split" role="button" style="font-size:13px;float:right;margin-top:10px;">
+                        <span class="text-white-50 icon"><i class="fas fa-pencil-alt"></i></span>
+                        <span class="text-white text">Editar Mesa</span>
+                    </a>
+                {% endif %}
+            </p>
+        </div>
+        <div class="card-body" style="background: #172452;">
+            <div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation"><a class="nav-link active" role="tab" data-bs-toggle="tab" href="#tab-1" style="color: white;background: #172452;">VALOR INICIAL</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-2" style="color: white;background: #172452;">APORTE</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-3" style="color: white;background: #172452;">SAQUE</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-4" style="color: white;background: #172452;">CONCLUIR PERÍODO</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" role="tabpanel" id="tab-1">
+                        <div class="table-responsive" style="margin-top: 20px;">
+                            <div style="padding: 10px;background: white;margin-top: 20px;border-radius: 5px;">
+                                {% if conta.mesa_dinheiro_aberta.reinvestimento_mesa %}
+                                    <table style="font-size:14px;" class="table table-hover table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th><strong>Data início</strong></th>
+                                                <th><strong>Data fim</strong></th>
+                                                <th><strong>Valor</strong></th>
+                                                <th><strong>Dias</strong></th>
+                                                <th><strong>Rendimentos</strong></th>
+                                                <th><strong>Valor Final</strong></th>
+                                                <th><strong>Chave PIX</strong></th>
+                                                <th><strong>Compr.</strong></th>
+                                                <th><strong>Editar</strong></th>
+                                                <th><strong>Excluir</strong></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for transacao in conta.mesa_dinheiro_aberta.reinvestimento_mesa %}
+                                            <tr>
+                                                <td>{{ transacao.data_inicio }}</td>
+                                                <td>{{ transacao.data_fim }}</td>
+                                                <td>R$ {{ transacao.valor }}</td>
+                                                <td>{{ transacao.dias }}</td>
+                                                <td>R$ {{transacao.rend_valor }} ({{ transacao.porcent_rend_valor }}%)</td>
+                                                <td>R$ {{ transacao.valor_final }}</td>
+                                                <td>{% if transacao.chave_pix %}{{ transacao.chave_pix }}{% else %}-{% endif %}</td>
+                                                <td>
+                                                    {% if transacao.comprovante %}
+                                                        <a href="{{ transacao.comprovante.url }}" class="btn btn-info btn-circle ms-1" role="button" title="Baixar Comprovante" download>
+                                                            <i class="fas fa-download text-white"></i>
+                                                        </a>
+                                                    {% else %}
+                                                        <span>-</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'reinvestimento_dinheiro_edit' transacao.pk %}" class="btn btn-warning btn-circle ms-1" role="button" data-bs-toggle="tooltip" title="EDITAR">
+                                                        <i class="fas fa-pencil-alt text-white"></i>  <!-- ou <i class="fas fa-edit text-white"></i> -->
+                                                    </a>
+                                                </td>
+
+                                                <td> <a href="{% url 'transacao_dinheiro_delete' transacao.pk %}" onclick="return confirm('Tem certeza que deseja excluir?');" class="btn btn-danger btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EXCLUIR"><i class="fas fa-trash text-white"></i></a></td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <p>Nenhum registro.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if conta.mesa_dinheiro_aberta %}
+                            <a href="{% url 'reinvestimento_dinheiro_create' conta.mesa_dinheiro_aberta.pk %}" class="btn btn-success btn-icon-split" role="button" style="margin-top:10px;float: right;"><span class="text-white-50 icon"><i class="fas fa-plus"></i></span><span class="text-white text">Adicionar</span></a>
+                        {% endif %}
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="tab-2">
+                        <div class="table-responsive" style="margin-top: 20px;">
+                            <div style="padding: 10px;background: white;margin-top: 20px;border-radius: 5px;">
+                                {% if conta.mesa_dinheiro_aberta.aportes_mesa %}
+                                    <table style="font-size:14px;" class="table table-hover table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th><strong>Data início</strong></th>
+                                                <th><strong>Data fim</strong></th>
+                                                <th><strong>Valor</strong></th>
+                                                <th><strong>Dias</strong></th>
+                                                <th><strong>Rendimentos</strong></th>
+                                                <th><strong>Valor Final</strong></th>
+                                                <th><strong>Chave PIX</strong></th>
+                                                <th><strong>Compr.</strong></th>
+                                                <th><trong>Editar</trong></th>
+                                                <th><strong>Excluir</strong></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for transacao in conta.mesa_dinheiro_aberta.aportes_mesa %}
+                                            <tr>
+                                                <td>{{ transacao.data_inicio }}</td>
+                                                <td>{{ transacao.data_fim }}</td>
+                                                <td>R$ {{ transacao.valor }}</td>
+                                                <td>{{ transacao.dias }}</td>
+                                                <td>R$ {{transacao.rend_valor }} ({{ transacao.porcent_rend_valor }}%)</td>
+                                                <td>R$ {{ transacao.valor_final }}</td>
+                                                <td>{% if transacao.chave_pix %}{{ transacao.chave_pix }}{% else %}-{% endif %}</td>
+                                                <td>
+                                                    {% if transacao.comprovante %}
+                                                        <a href="{{ transacao.comprovante.url }}" class="btn btn-info btn-circle ms-1" role="button" title="Baixar Comprovante" download>
+                                                            <i class="fas fa-download text-white"></i>
+                                                        </a>
+                                                    {% else %}
+                                                        <span>-</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'aporte_dinheiro_edit' transacao.pk %}" class="btn btn-warning btn-circle ms-1" role="button" data-bs-toggle="tooltip" title="EDITAR">
+                                                        <i class="fas fa-pencil-alt text-white"></i>  <!-- ou <i class="fas fa-edit text-white"></i> -->
+                                                    </a>
+                                                </td>
+                                                <td> <a href="{% url 'transacao_dinheiro_delete' transacao.pk %}" onclick="return confirm('Tem certeza que deseja excluir?');" class="btn btn-danger btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EXCLUIR"><i class="fas fa-trash text-white"></i></a></td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <p>Nenhum registro.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if conta.mesa_dinheiro_aberta %}
+                            <a href="{% url 'aporte_dinheiro_create' conta.mesa_dinheiro_aberta.pk %}" class="btn btn-success btn-icon-split" role="button" style="margin-top:10px;float: right;"><span class="text-white-50 icon"><i class="fas fa-plus"></i></span><span class="text-white text">Adicionar Aporte</span></a>
+                        {% endif %}
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="tab-3">
+                        <div class="table-responsive" style="margin-top: 20px;">
+                            <div style="padding: 10px;background: white;margin-top: 20px;border-radius: 5px;">
+                                {% if conta.mesa_dinheiro_aberta.saques_mesa %}
+                                    <table style="font-size:14px;" class="table table-hover table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th><strong>Data</strong></th>
+                                                <th><strong>Valor</strong></th>
+                                                <th><strong>Chave Pix</strong></th>
+                                                <th><strong>Titular Pix</strong></th>
+                                                <th><strong>Banco Pix</strong></th>
+                                                <th><strong>Compr.</strong></th>
+                                                <th><strong>Editar</strong></th>
+                                                <th><strong>Excluir</strong></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for transacao in conta.mesa_dinheiro_aberta.saques_mesa %}
+                                            <tr>
+                                                <td>{{ transacao.data_inicio }}</td>
+                                                <td>R$ {{ transacao.valor }}</td>
+                                                <td>
+                                                    {% if transacao.chave_pix_saque %}
+                                                        {{ transacao.chave_pix_saque }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if transacao.nome_pix_saque %}
+                                                        {{ transacao.nome_pix_saque }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if transacao.banco_pix_saque %}
+                                                        {{ transacao.banco_pix_saque }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if transacao.comprovante %}
+                                                        <a href="{{ transacao.comprovante.url }}" class="btn btn-info btn-circle ms-1" role="button" title="Baixar Comprovante" download>
+                                                            <i class="fas fa-download text-white"></i>
+                                                        </a>
+                                                    {% else %}
+                                                        <span>-</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'saque_dinheiro_edit' transacao.pk %}" class="btn btn-warning btn-circle ms-1" role="button" data-bs-toggle="tooltip" title="EDITAR">
+                                                        <i class="fas fa-pencil-alt text-white"></i>  <!-- ou <i class="fas fa-edit text-white"></i> -->
+                                                    </a>
+                                                </td>
+                                                <td> <a href="{% url 'transacao_dinheiro_delete' transacao.pk %}" onclick="return confirm('Tem certeza que deseja excluir?');" class="btn btn-danger btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EXCLUIR"><i class="fas fa-trash text-white"></i></a></td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <p>Nenhum registro.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if conta.mesa_dinheiro_aberta %}
+                            <a href="{% url 'saque_dinheiro_create' conta.mesa_dinheiro_aberta.pk %}" class="btn btn-danger btn-icon-split" role="button" style="margin-top:10px; float: right;">
+                                <span class="text-white-50 icon"><i class="fas fa-arrow-down"></i></span>
+                                <span class="text-white text">Autorizar Saque</span>
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="tab-5">
+                        <div style="padding: 10px;background: white;margin-top: 20px;border-radius: 5px;">
+                            {% if conta.mesa_dinheiro_aberta %}
+                                {% if conta.mesa_dinheiro_aberta.saldo_final_numero > 0 %}
+                                    <div class="alert alert-warning alert-dismissible" role="alert">
+                                        <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="alert"></button>
+                                        <span><strong>Atenção!</strong>&nbsp;O investidor possui R$ {{ conta.mesa_dinheiro_aberta.saldo_final }} na mesa. Ao concluir o período esse valor será automaticamente reinvestido.</span>
+                                    </div>
+                                    <a href="{% url 'concluir_reinvestir_periodo_mesa_dinheiro' conta.mesa_dinheiro_aberta.pk %}" class="btn btn-primary btn-icon-split" role="button" style="display:block; width:250px;">
+                                        <span class="text-white-50 icon"><i class="fas fa-check"></i></span>
+                                        <span class="text-white text">CONCLUIR PERÍODO</span>
+                                    </a>
+                                {% else %}
+                                    <div class="alert alert-warning alert-dismissible" role="alert">
+                                        <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="alert"></button>
+                                        <span><strong>Atenção!</strong>&nbsp;O investidor não possui saldo na mesa.</span>
+                                    </div>
+                                    <a href="{% url 'concluir_periodo_mesa_dinheiro' conta.mesa_dinheiro_aberta.pk %}" class="btn btn-primary btn-icon-split" role="button" style="display:block; width:250px;">
+                                        <span class="text-white-50 icon"><i class="fas fa-check"></i></span>
+                                        <span class="text-white text">CONCLUIR PERÍODO</span>
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body">
+            <a href="{% url 'conta_list' conta.cliente.pk %}" class="btn btn-secondary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span><span class="text-white text">CONTA</span></a>
+        </div>
+    </div>
+
+{% endblock %}

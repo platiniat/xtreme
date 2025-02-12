@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-danger m-0 fw-bold">Tem certeza que deseja aprovar esta retirada?</p>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+
+                <!-- Exibe os detalhes do investimento -->
+                <p><strong>Cliente:</strong> {{ retirada.cliente.nome }}</p>
+                <p><strong>Valor:</strong> R$ {{ retirada.valor_formatado }}</p>
+
+                <!-- Campo para digitar a senha -->
+                <div class="mb-3">
+                    <label for="senha" class="form-label">Digite sua senha para confirmar a exclusão:</label>
+                    <input type="password" class="form-control" id="senha" name="senha" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="data_retirada" class="form-label">Data da Retirada:</label>
+                    <input type="date" class="form-control" id="data_retirada" name="data_retirada" required>
+                </div>
+
+                <!-- Botão para confirmar a exclusão -->
+                <button type="submit" class="btn btn-danger btn-icon-split">
+                    <span class="text-white-50 icon"><i class="fas fa-check"></i></span>
+                    <span class="text-white text">CONFIRMAR</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow" style="margin-top: 30px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body">
+            <a href="{% url 'retirada_list' retirada.cliente.pk %}" class="btn btn-secondary btn-icon-split" role="button">
+                <span class="text-white-50 icon"><i class="fa fa-arrow-circle-left"></i></span>
+                <span class="text-white text">VOLTAR</span>
+            </a>
+        </div>
+    </div>
+{% endblock %}

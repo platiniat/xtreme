@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <!-- Título condicional para criação ou edição -->
+            <p class="text-primary m-0 fw-bold">
+                Editar Investimento de Cartão para {{ investimento.cliente.nome }}
+            </p>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="alert alert-warning" role="alert">
+                    <strong>Atenção!</strong> Como existem prestações pagas, elas serão excluídas e novas prestações serão geradas. Você tem certeza de que deseja continuar?
+                </div>
+
+                <!-- Exibe os campos do formulário -->
+                <p><strong>Investimento atual:</strong> {{ investimento.valor_maquineta }} dividido em {{ investimento.num_prestacoes }} parcelas.</p>
+
+                <!-- Botão de envio, com texto condicional -->
+                <button class="btn btn-danger btn-icon-split" type="submit">
+                    <span class="text-white-50 icon"><i class="fas fa-check"></i></span>
+                    <span class="text-white text">Sim, Confirmar Exclusão das Prestações Pagas</span>
+                </button>
+                <a href="{% url 'investimento_cartao_edit' investimento.pk %}" class="btn btn-secondary btn-icon-split">
+                    <span class="text-white-50 icon"><i class="fa fa-arrow-circle-left"></i></span>
+                    <span class="text-white text">Cancelar</span>
+                </a>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow" style="margin-top: 30px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body">
+            <!-- Botão de voltar que leva o usuário à lista de investimentos do cliente -->
+            <a href="{% url 'periodo_dinheiro_list' investimento.cliente.periodo.pk %}" class="btn btn-secondary btn-icon-split" role="button">
+                <span class="text-white-50 icon"><i class="fa fa-arrow-circle-left"></i></span>
+                <span class="text-white text">VOLTAR</span>
+            </a>
+        </div>
+    </div>
+{% endblock %}

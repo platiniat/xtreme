@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+    <h5>Investidor: {{ investidor.nome }}</h5>
+    <p style="font-size:18px;">Será reinvestido <span style="color:green;"><strong>R$ {{ conta.valor_reinvestir }}</strong></span></p>
+
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">DADOS DO NOVO PERÍODO</p>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-primary btn-icon-split" type="submit"><span class="text-white-50 icon"><i class="fas fa-check"></i></span><span class="text-white text">Salvar</span></button>
+            </form>
+        </div>
+    </div>
+    <div class="card shadow" style="margin-top: 30px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body"><a href="{% url 'conta_list' investidor.pk %}" class="btn btn-secondary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fa fa-arrow-circle-left"></i></span><span class="text-white text">CANCELAR E VOLTAR</span></a></div>
+    </div>
+
+{% endblock %}

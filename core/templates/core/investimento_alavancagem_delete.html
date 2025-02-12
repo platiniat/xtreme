@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-danger m-0 fw-bold">Tem certeza que deseja excluir?</p>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+
+                <!-- Exibe os detalhes do investimento -->
+                {% if investimento.autorizado %}
+                    <p>Excluir investimento</p>
+                {% else %}
+                    <p>Excluir solicitação</p>
+                {% endif %}
+                <p><strong>Cliente:</strong> {{ investimento.periodo.cliente.nome }}</p>
+                <p><strong>Valor:</strong> R$ {{ investimento.valor_formatado }}</p>
+                {% if investimento.data_inicio %}
+                    <p><strong>Data de Início:</strong> {{ investimento.data_inicio }}</p>
+                    <p><strong>Data de Fim:</strong> {{ investimento.data_fim }}</p>
+                {% endif %}
+
+                <!-- Campo para digitar a senha -->
+                <div class="mb-3">
+                    <label for="senha" class="form-label">Digite sua senha para confirmar a exclusão:</label>
+                    <input type="password" class="form-control" id="senha" name="senha" required>
+                </div>
+
+                <!-- Botão para confirmar a exclusão -->
+                <button type="submit" class="btn btn-danger btn-icon-split">
+                    <span class="text-white-50 icon"><i class="fas fa-trash"></i></span>
+                    <span class="text-white text">Excluir</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow" style="margin-top: 30px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body">
+            <a href="#" class="btn btn-secondary btn-icon-split" role="button">
+                <span class="text-white-50 icon"><i class="fa fa-arrow-circle-left"></i></span>
+                <span class="text-white text">VOLTAR</span>
+            </a>
+        </div>
+    </div>
+{% endblock %}

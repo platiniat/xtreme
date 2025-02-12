@@ -1,0 +1,135 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="card shadow">
+        <div class="card-body">
+            <div style="width: 100%;max-width: 600px;display: inline-block;">
+                <h4>{{ conta.cliente.nome}}</h4>
+                <p style="margin: 0;font-size: 14px;">Conta: {{conta.numero}}</p>
+                <p style="margin: 0;font-size: 14px;">Abertura: {{conta.data_abertura}}</p>
+            </div>
+            <div style="width: 100%;max-width: 200px;display: inline-block;float: right;">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">CARTEIRA</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'mesa_detail' conta.pk %}">DINHEIRO</a>
+                        <a class="dropdown-item" href="{% url 'cartao_detail' conta.pk %}">CARTÃO</a>
+                        <a class="dropdown-item" href="{% url 'alavancagem_detail' conta.pk %}">ALAVANCAGEM</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">CARTÃO</p>
+        </div>
+        <div class="card-body" style="background: #172452;">
+            <div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation"><a class="nav-link active" role="tab" data-bs-toggle="tab" href="#tab-1" style="color: white;background: #172452;">RESUMO</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-2" style="color: white;background: #172452;">APORTE</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-3" style="color: white;background: #172452;">SAQUE</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-4" style="color: white;background: #172452;">TRANSFERÊNCIA</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-5" style="color: white;background: #172452;">CONCLUIR PERÍODO</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" role="tabpanel" id="tab-1">
+                        <div style="padding: 10px;background: white;margin-top: 20px;border-radius: 5px;">
+                            <div class="table-responsive" style="width: 100%;margin-left: auto;margin-right: auto;border-radius: 10px;">
+                                <table class="table table-hover table-sm" style="font-size:14px;">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 220px;"><strong>Data início</strong></td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Data Fim</strong></td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Quantidade dias</strong></td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 230px;"><strong>Valor investido inicial</strong></td>
+                                            <td>R$ 0</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Aportes</strong></td>
+                                            <td>R$ 0</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Saques</strong></td>
+                                            <td>R$ 0</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Transferências efetuadas</strong></td>
+                                            <td>...</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Transferências recebidas</strong></td>
+                                            <td>...</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Total Entradas</strong></td>
+                                            <td>R$ 0</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Total Saidas</strong></td>
+                                            <td>R$ 0</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Rendimento do valor inicial</strong></td>
+                                            <td>R$ 0 (0%)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Rendimento dos aportes</strong></td>
+                                            <td>R$ 0</td>
+                                        </tr>
+                                        <tr style="font-size: 17px;">
+                                            <td><strong>Rendimento Total</strong></td>
+                                            <td><strong>R$ 0</strong></td>
+                                        </tr>
+                                        <tr style="font-size: 21px;">
+                                            <td><strong>Saldo Final</strong></td>
+                                            <td><strong>R$ 0</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <a href="#" class="btn btn-primary btn-icon-split" role="button" style="margin-top:10px; float: right;">
+                                    <span class="text-white-50 icon"><i class="fas fa-check-circle"></i></span>
+                                    <span class="text-white text">Concluir Período</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="tab-2">
+                        ÁREA APORTE
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="tab-3">
+                        ÁREA DE SAQUE
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="tab-4">
+                        ÁREA DE TRANSFERÊNCIA
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="tab-5">
+                        ÁREA DE CONCLUIR PERÍODO
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body">
+            <a href="{% url 'conta_list' mesa.conta.cliente.pk %}" class="btn btn-secondary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span><span class="text-white text">CONTA</span></a>
+        </div>
+    </div>
+
+{% endblock %}

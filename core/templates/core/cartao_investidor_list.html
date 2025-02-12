@@ -1,0 +1,61 @@
+{% extends 'core/base_investidor_area.html' %}
+{% load static %}
+
+{% block main %}
+
+<h5 class="text-dark mb-4">Investimentos de Cartões de {{ cliente.nome }}</h5>
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <i class="fa fa-credit-card" style="font-size: 45px;color:#ae6b3b;margin-bottom:0px;"></i>
+            <p style="color:#ae6b3b;"> <strong>CARTÃO</strong></p>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                <table style="font-size:14px;" class="table my-0" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>Nº</th>
+                            <th>Início</th>
+                            <th>Fim</th>
+                            <th>Sócio</th>
+                            <th>Valor</th>
+                            <th>% rendimentos</th>
+                            <th>Rend. mês</th>
+                            <th>Rend. previsto</th>
+                            <th>Valor Maquineta</th>
+                            <th>Parcelas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in investimentos %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ i.data_inicio|date:"d/m/Y" }}</td>
+                                <td>{{ i.data_fim|date:"d/m/Y" }}</td>
+                                <td>{{ i.socio }}</td>
+                                <td>R$ {{ i.valor_formatado }}</td>
+                                <td>{{ i.porcent_rend_valor }}%</td>
+                                <td>R$ {{ i.rendimento_mes }}</td>
+                                <td>R$ {{ i.rendimentos }}</td>
+                                <td>{{ i.maquineta_detail }}</td>
+                                <td><a href="{% url 'investidor_area_cartao_parcelas' i.pk %}" class="btn btn-info btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="PARCELAS"><i class="fas fa-calendar-check text-white"></i></a></td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="10">Nenhum investimento de cartão encontrado. </td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body"><a href="{% url 'investidor_area_investimentos' %}" class="btn btn-secondary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span><span class="text-white text">VOLTAR</span></a></div>
+    </div>
+
+{% endblock %}

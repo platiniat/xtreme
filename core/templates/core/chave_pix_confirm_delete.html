@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-danger m-0 fw-bold">Confirmar Exclusão</p>
+        </div>
+        <div class="card-body">
+            <p>Tem certeza que deseja excluir a chave PIX abaixo?</p>
+            <p><strong>Nome:</strong> {{ chave_pix.nome }}</p>
+            <p><strong>Banco:</strong> {{ chave_pix.banco }}</p>
+            <p><strong>Chave:</strong> {{ chave_pix.chave }}</p>
+            <p><strong>CPF/CNPJ:</strong> {{ chave_pix.cpf_cnpj }}</p>
+
+            <form method="POST">
+                {% csrf_token %}
+                <button class="btn btn-danger btn-icon-split" type="submit">
+                    <span class="text-white-50 icon"><i class="fas fa-trash"></i></span>
+                    <span class="text-white text">EXCLUIR</span>
+                </button>
+                <a href="{% url 'agencia_edit' agencia.pk %}" class="btn btn-secondary btn-icon-split">
+                    <span class="text-white-50 icon"><i class="fa fa-arrow-circle-left"></i></span>
+                    <span class="text-white text">CANCELAR</span>
+                </a>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

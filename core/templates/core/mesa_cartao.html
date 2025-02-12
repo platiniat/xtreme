@@ -1,0 +1,164 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="card shadow">
+        <div class="card-body">
+            <div style="width: 100%;max-width: 600px;display: inline-block;">
+                <h4>{{ conta.cliente.nome}}</h4>
+                <p style="margin: 0;font-size: 14px;">Conta: {{conta.numero}}</p>
+                <p style="margin: 0;font-size: 14px;">Abertura: {{conta.data_abertura}}</p>
+            </div>
+            <div style="width: 100%;max-width: 200px;display: inline-block;float: right;">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">CARTEIRA</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'mesa_geral' conta.pk %}">GERAL</a>
+                        <a class="dropdown-item" href="{% url 'mesa_dinheiro' conta.pk %}">DINHEIRO</a>
+                        <a class="dropdown-item" href="{% url 'investimento_cartao' conta.pk %}">CARTÃO</a>
+                        <a class="dropdown-item" href="{% url 'mesa_alavancagem' conta.pk %}">ALAVANCAGEM</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">CARTÃO</p>
+        </div>
+        <div class="card-body" style="background: #172452;">
+            <div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation"><a class="nav-link active" role="tab" data-bs-toggle="tab" href="#tab-1" style="color: white;background: #172452;">INVESTIMENTOS</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-2" style="color: white;background: #172452;">RESUMO</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-3" style="color: white;background: #172452;">HISTÓRICO</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" role="tabpanel" id="tab-1">
+                        <div class="table-responsive" style="margin-top: 20px;">
+                            <div style="padding: 10px;background: white;margin-top: 20px;border-radius: 5px;">
+                                {% if investimentos_cartao %}
+                                    <table style="font-size:14px;" class="table table-hover table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th><strong>Data início</strong></th>
+                                                <th><strong>Data fim</strong></th>
+                                                <th><strong>Valor Investido</strong></th>
+                                                <th><strong>Valor Maquineta</strong></th>
+                                                <th><strong>Rend. mês</strong></th>
+                                                <th><strong>Rend. período</strong></th>
+                                                <th><strong>Parcelas</strong></th>
+                                                <th><strong>Saques</strong></th>
+                                                <th><strong>Editar</strong></th>
+                                                <th><strong>Concluir</strong></th>
+                                                <th><strong>Excluir</strong></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for i in investimentos_cartao %}
+                                            <tr>
+                                                <td>{{ i.data_inicio }}</td>
+                                                <td>
+                                                    {% if i.data_fim %}
+                                                        {{ i.data_fim }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>R$ {{ i.valor_investido }}</td>
+                                                <td>R$ {{ i.valor_maquineta }}</td>
+                                                <td>R$ {{i.rend_valor }} ({{ i.porcent_rend_valor }}%)</td>
+                                                <td>R$ {{ i.valor_final }}</td>
+                                                <td>
+                                                    <a href="{% url 'prestacao_list' i.pk %}" class="btn btn-info btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="VER">
+                                                        <i class="fas fa-eye text-white"></i>
+                                                    </a>
+                                                    {{ i.qnt_prestacoes }} x R${{ i.valor_prestacao }}
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'saque_cartao_list' i.pk %}" class="btn btn-secondary btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="VER">
+                                                        <i class="fas fa-eye text-white"></i>
+                                                    </a>
+                                                    R$ {{ i.valor_saques }}
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'investimento_cartao_edit' i.pk %}" class="btn btn-warning btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EDITAR">
+                                                        <i class="fas fa-pencil-alt text-white"></i>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'concluir_investimento' i.pk %}" onclick="return confirm('Tem certeza que deseja concluir o investimento?');" class="btn btn-success btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="CONCLUIR INVESTIMENTO">
+                                                        <i class="fas fa-check-circle text-white"></i>
+                                                    </a>
+                                                </td>
+                                                <td> <a href="{% url 'excluir_investimento' i.pk %}" onclick="return confirm('Tem certeza que deseja excluir?');" class="btn btn-danger btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EXCLUIR"><i class="fas fa-trash text-white"></i></a></td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <p>Nenhum registro.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                            <a href="{% url 'investimento_cartao_create' conta.pk %}" class="btn btn-success btn-icon-split" role="button" style="margin-top:10px;float: right;"><span class="text-white-50 icon"><i class="fas fa-plus"></i></span><span class="text-white text">Adicionar Investimento</span></a>
+
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="tab-2">
+                        <div style="padding: 10px;background: white;margin-top: 20px;border-radius: 5px;">
+                            {% if investimentos_cartao %}
+                                <div class="table-responsive" style="width: 100%;margin-left: auto;margin-right: auto;border-radius: 10px;">
+                                    <table class="table table-hover table-sm" style="font-size:14px;">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Maquineta</strong></td>
+                                                <td>R$ {{total_maquineta}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Investido</strong></td>
+                                                <td>R$ {{total_investido}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Rend. mês</strong></td>
+                                                <td>R$ {{ total_rendimentos }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Saques</strong></td>
+                                                <td>R$ {{ total_saques }}</td>
+                                            </tr>
+                                            <tr style="font-size: 21px;">
+                                                <td><strong>Soma cartões + Rend.</strong></td>
+                                                <td><strong>R$ {{ saldo_final }}</strong></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                Não possui investimento de cartão ativo!
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="tab-3">
+                        <div class="table-responsive" style="margin-top: 20px;">
+                            <div style="padding: 10px;background: white;margin-top: 20px;border-radius: 5px;">
+                                <a href="#" class="btn btn-secondary btn-icon-split" role="button" style="margin-top:10px">
+                                    <span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span>
+                                    <span class="text-white text">INVESTIMENTOS ANTEIORES</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body">
+            <a href="{% url 'conta_list' conta.cliente.pk %}" class="btn btn-secondary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span><span class="text-white text">CONTA</span></a>
+        </div>
+    </div>
+
+{% endblock %}

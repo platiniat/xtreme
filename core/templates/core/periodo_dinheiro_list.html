@@ -1,0 +1,313 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+
+<h5 style="maring-bottom:0px;" class="text-dark mb-4">Investidor: {{ periodo.cliente.nome }}</h5>
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <i class="fa fa-money" style="font-size: 30px;color:green;margin-bottom:0px;display:inline;margin-right:5px;"></i>
+            <p style="color:green;margin-bottom:0px;display:inline;font-size:20px;"> <strong>DINHEIRO</strong></p>
+            <span style="margin-top:0px;margin-bottom:0px;display:block;">{{ periodo.data_inicio }} à {{ periodo.data_fim }}</span>
+        </div>
+        <div class="card-body">
+            {% if periodo.solicitacoes_investimentos %}
+                <div style="border: 1px solid orange;padding:5px;margin-bottom:10px;">
+                    <div style="background:#ededed;"><i class="material-icons" style="font-size: 25px;width: 100%;color: orange;display:inline;">pan_tool</i> <span style="font-size:20px;display:inline;color:black;"><strong>Aportes Solicitados</strong></span></div>
+                    <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                        <table style="font-size:14px;" class="table my-0" id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Nº</th>
+                                    <th>Solicitado em</th>
+                                    <th>Valor</th>
+                                    <th>Comprovante</th>
+                                    <th>Aprovar</th>
+                                    <th>Excluir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in periodo.solicitacoes_investimentos %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ i.data_solicitacao|date:"d/m/Y" }}</td>
+                                        <td>R$ {{ i.valor_formatado }}</td>
+                                        <td>comprovante</td>
+                                        <td><a href="{% url 'aprovar_solicitacao_aporte' i.pk %}" class="btn btn-success btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="APROVAR"><i class="fas fa-check text-white"></i></a></td>
+                                        <td>
+                                            <a href="{% url 'investimento_dinheiro_delete' i.pk %}" onclick="return confirm('Tem certeza que deseja excluir?');" class="btn btn-danger btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EXCLUIR"><i class="fas fa-trash text-white"></i></a>
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="9">Nenhum investimento de dinheiro encontrado. </td>
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endif %}
+
+
+            {% if periodo.solicitacoes_retiradas %}
+                <div style="border: 1px solid brown;padding:5px;margin-bottom:10px;">
+                    <div style="background:#ededed;"><i class="material-icons" style="font-size: 25px;width: 100%;color: red;display:inline;">pan_tool</i> <span style="font-size:20px;display:inline;color:black;"><strong>Rendimentos Solicitados</strong></span></div>
+                    <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                        <table style="font-size:14px;" class="table my-0" id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Solicitado</th>
+                                    <th>Valor</th>
+                                    <th>Comprovante</th>
+                                    <th>Chave PIX</th>
+                                    <th>Banco PIX</th>
+                                    <th>Titular PIX</th>
+                                    <th>Confirmar</th>
+                                    <th>Excluir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for s in periodo.solicitacoes_retiradas %}
+                                    <tr>
+                                        <td>{{ s.data_solicitacao|date:"d/m/Y" }}</td>
+                                        <td>R$ {{ s.valor_formatado }}</td>
+                                        <td>comprovante</td>
+                                        <td>{{ s.chave_pix }}</td>
+                                        <td>{{ s.banco_pix }}</td>
+                                        <td>{{ s.titular_pix }}</td>
+                                        <td><a href="{% url 'aprovar_solicitacao_rendimento' s.pk %}" class="btn btn-success btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="PROVAR"><i class="fas fa-check text-white"></i></a></td>
+                                        <td>
+                                            <a href="{% url 'retirada_delete' s.pk %}" onclick="return confirm('Tem certeza que deseja excluir?');" class="btn btn-danger btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EXCLUIR"><i class="fas fa-trash text-white"></i></a>
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="9">Nenhum investimento de dinheiro encontrado. </td>
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div style="border: 1px solid blue;padding:5px;margin-bottom:10px;">
+                <div style="background:#ededed;"><i class="material-icons" style="font-size: 25px;width: 100%;color: blue;display:inline;">check_circle</i> <span style="font-size:20px;display:inline;color:black;"><strong>Investimentos Confirmados</strong></span><a href="{% url 'investimento_dinheiro_create' periodo.pk %}" class="btn btn-primary btn-icon-split" role="button" style="float: right;font-size: 12px;width:200px;"><span class="text-white-50 icon"><i class="fas fa-money"></i></span><span class="text-white text">ADICIONAR APORTE</span></a></div>
+                <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                    <table style="font-size:14px;" class="table my-0" id="dataTable">
+                        <thead>
+                            {% if periodo.investimentos %}
+                                <tr>
+                                    <th>Nº</th>
+                                    <th>Início</th>
+                                    <th>Fim</th>
+                                    <th>Sócio</th>
+                                    <th>Valor</th>
+                                    <th>% rendimentos</th>
+                                    <th>Rendimentos</th>
+                                    <th>Comprovante</th>
+                                    <th>Autorização</th>
+                                    <th>Editar</th>
+                                    <th>Excluir</th>
+                                </tr>
+                            {% endif %}
+                        </thead>
+                        <tbody>
+                            {% for i in periodo.investimentos %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ i.data_inicio|date:"d/m/Y" }}</td>
+                                    <td>{{ i.data_fim|date:"d/m/Y" }}</td>
+                                    <td>{{ i.socio }}</td>
+                                    <td>R$ {{ i.valor_formatado }}</td>
+                                    <td>{{ i.porcent_rend_valor }}%</td>
+                                    <td>R$ {{ i.valor_rendimento_formatado }}</td>
+                                    <td>comprovante</td>
+                                    <td>{{ i.autorizador }}</td>
+                                    <td><a href="{% url 'investimento_dinheiro_edit' i.pk %}" class="btn btn-warning btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EDITAR"><i class="fas fa-eye text-white"></i></a></td>
+                                    <td>
+                                        <a href="{% url 'investimento_dinheiro_delete' i.pk %}" onclick="return confirm('Tem certeza que deseja excluir?');" class="btn btn-danger btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EXCLUIR"><i class="fas fa-trash text-white"></i></a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="9">Nenhum investimento de dinheiro encontrado para este periodo. </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <table>
+                    <tr>
+                        <td>Total Investido</td>
+                        <td><strong>R$ {{periodo.soma_investimentos}}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Total Rendimentos</td>
+                        <td><strong>R$ {{periodo.soma_rendimentos}}</strong></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="border: 1px solid brown;padding:5px;margin-bottom:10px;">
+                <div style="background:#ededed;"><i class="material-icons" style="font-size: 25px;width: 100%;color: red;display:inline;">check_circle</i> <span style="font-size:20px;display:inline;color:black;"><strong>Retiradas Confirmadas</strong></span>
+                    {% if not periodo.retiradas %}
+                        <a href="{% url 'retirada_create' periodo.pk %}" class="btn btn-danger btn-icon-split" role="button" style="float: right;font-size: 12px;width:200px;"><span class="text-white-50 icon"><i class="fas fa-plus"></i></span><span class="text-white text">ADICIONAR RETIRADA</span></a>
+                    {% endif %}
+                </div>
+                <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                    <table style="font-size:14px;" class="table my-0" id="dataTable">
+                        <thead>
+                            {% if periodo.retiradas %}
+                                <tr>
+                                    <th>Nº</th>
+                                    <th>Solicitado</th>
+                                    <th>Confirmado</th>
+                                    <th>Valor</th>
+                                    <th>Chave PIX</th>
+                                    <th>Banco PIX</th>
+                                    <th>Titular PIX</th>
+                                    <th>Comprovante</th>
+                                    <th>Autorização</th>
+                                    <th>Editar</th>
+                                    <th>Excluir</th>
+                                </tr>
+                            {% endif %}
+                        </thead>
+                        <tbody>
+                            {% for r in periodo.retiradas %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ r.data_solicitacao|date:"d/m/Y" }}</td>
+                                    <td>{{ r.data|date:"d/m/Y" }}</td>
+                                    <td>R$ {{ r.valor_formatado }}</td>
+                                    <td>{{ r.chave_pix }}</td>
+                                    <td>{{ r.banco_pix }}</td>
+                                    <td>{{ r.titular_pix }}</td>
+                                    <td>comprovante</td>
+                                    <td>{{ r.autorizador }}</td>
+                                    <td><a href="{% url 'retirada_edit' r.pk %}" class="btn btn-warning btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EDITAR"><i class="fas fa-eye text-white"></i></a></td>
+                                    <td>
+                                        <a href="{% url 'retirada_delete' r.pk %}" onclick="return confirm('Tem certeza que deseja excluir?');" class="btn btn-danger btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EXCLUIR"><i class="fas fa-trash text-white"></i></a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="9">Nenhuma retirada para este periodo. </td>
+                                </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+                <table>
+                    <tr>
+                        <td>Total Retiradas</td>
+                        <td><strong>R$ {{periodo.soma_retiradas}}</strong></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card shadow" style="margin-top:30px;">
+        <div class="card-header py-3">
+            <i class="fa fa-credit-card" style="font-size: 30px;color:brown;margin-bottom:0px;display:inline;margin-right:5px;"></i>
+            <p style="color:brown;margin-bottom:0px;display:inline;font-size:20px;"> <strong>CARTAO</strong></p>
+            <span style="margin-top:0px;margin-bottom:0px;display:block;">INVESTIMENTOS DE CARTÃO</span>
+        </div>
+        <div class="card-body">
+            <div style="border: 1px solid gray;padding:5px;margin-bottom:10px;">
+                <div style="background:#ededed;"><i class="fa fa-credit-card" style="font-size: 20px;width: 100%;color: blue;display:inline;"></i> <span style="font-size:20px;display:inline;color:black;"><strong>Cartões Confirmados</strong></span><a href="{% url 'investimento_cartao_create' periodo.pk %}" class="btn btn-primary btn-icon-split" role="button" style="float: right;font-size: 12px;width:200px;"><span class="text-white-50 icon"><i class="fas fa-credit-card"></i></span><span class="text-white text">INVESTIR CARTÃO</span></a></div>
+                <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                    <table style="font-size:14px;" class="table my-0" id="dataTable">
+                        <thead>
+                            {% if periodo.investimentos_cartoes_abertos.investimentos_cartoes %}
+                                <tr>
+                                    <th>Nº</th>
+                                    <th>Início</th>
+                                    <th>Fim</th>
+                                    <th>Sócio</th>
+                                    <th>Maquineta</th>
+                                    <th>Nº_Prestações</th>
+                                    <th>Valor_prestação</th>
+                                    <th>Valor_Investido</th>
+                                    <th>Rend._total</th>
+                                    <th>Rend._mês</th>
+                                    <th>Rend._%</th>
+                                    <th>comprov.</th>
+                                    <th>autorizador</th>
+                                    <th>Finalizar</th>
+                                    <th>Editar</th>
+                                    <th>Excluir</th>
+                                </tr>
+                            {% endif %}
+                        </thead>
+                        <tbody>
+                            {% for i in periodo.investimentos_cartoes_abertos.investimentos_cartoes %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ i.data_inicio|date:"d/m/Y" }}</td>
+                                    <td>{{ i.data_fim|date:"d/m/Y" }}</td>
+                                    <td>{{ i.socio }}</td>
+                                    <td>R${{ i.valor_maquineta_formatado }}</td>
+                                    <td>
+                                        {% if i.num_prestacoes > 0 %}
+                                            <a style="width:20px;height:25px;" href="{% url 'investimento_cartao_parcelas' i.pk %}" class="btn btn-info btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="VER PRESTAÇÕES"><i class="fas fa-eye text-white"></i></a> ({{ i.num_prestacoes }})
+                                        {% endif %}
+                                    </td>
+                                    <td>R${{ i.valor_prestacao_formatado }}</td>
+                                    <td>R${{ i.valor_real_formatado }}</td>
+                                    <td>R${{ i.rendimento_total_formatado }}</td>
+                                    <td>R${{ i.rendimento_mes_formatado }}</td>
+                                    <td>{{ i.porcent_rend_valor }}%</td>
+                                    <td>BAIXAR</td>
+                                    <td>{{ i.autorizador }}</td>
+                                    <td><a href="{% url 'investimento_cartao_finalizar' i.pk %}" class="btn btn-warning btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="FINALIZAR"><i class="fas fa-flag-checkered text-white"></i></a></td>
+                                    <td><a href="{% url 'investimento_cartao_edit' i.pk periodo.pk %}" class="btn btn-info btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EDITAR"><i class="fas fa-eye text-white"></i></a></td>
+                                    <td>
+                                        <a href="#" onclick="return confirm('Tem certeza que deseja excluir?');" class="btn btn-danger btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EXCLUIR"><i class="fas fa-trash text-white"></i></a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="9">Nenhum investimento de dinheiro encontrado para este periodo. </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if periodo.investimentos_cartoes_abertos.investimentos_cartoes %}
+                    <table>
+                        <tr>
+                            <td>Total Investido em aberto</td>
+                            <td><strong>R$ {{periodo.investimentos_cartoes_abertos.investido}}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Investido curto prazo (mês atual)</td>
+                            <td><strong>R$ {{periodo.investimentos_cartoes_abertos.investido_mes_atual}}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Rendimento mês atual</td>
+                            <td><strong>R$ {{periodo.investimentos_cartoes_abertos.rendimento_mes}}</strong></td>
+                        </tr>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body"><a href="{% url 'periodo' periodo.cliente.pk %}" class="btn btn-secondary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span><span class="text-white text">VOLTAR</span></a></div>
+    </div>
+
+{% endblock %}

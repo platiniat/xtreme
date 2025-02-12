@@ -1,0 +1,55 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Confirmar Conclusão de período</p>
+        </div>
+        <div class="card-body">
+            <p>Caso não queira reinvestir o valor, você deve realizar o saque antes de concluir o período!</p>
+
+
+            <div class="alert alert-primary">DADOS DO NOVO PERÍODO</div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div style="margin-bottom:10px;">
+                    <label for="data_inicio">Data de Início:</label>
+                    <input class="form-control" type="date" id="data_inicio" name="data_inicio" required>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label for="data_fim">Data de Fim:</label>
+                    <input class="form-control" type="date" id="data_fim" name="data_fim" required>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label for="porcentagem_rendimento">Valor a reinvestir:</label>
+                    <input class="form-control" type="text" value="{{mesa_dinheiro.saldo_final}}" readonly>
+
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label for="porcentagem_rendimento">Porcentagem de Rendimento:</label>
+                    <input class="form-control" type="number" id="porcentagem_rendimento" name="porcentagem_rendimento" step="0.01" required>
+                </div>
+                <div style="margin-bottom:10px;" class="mb-3">
+                    <label for="password" class="form-label">Digite sua senha:</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn btn-warning">CONFIRMAR</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body">
+            <a href="{% url 'mesa_dinheiro' mesa_dinheiro.conta.pk %}" class="btn btn-secondary btn-icon-split" role="button" style="margin-top: 10px;">
+                <span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span>
+                <span class="text-white text">CANCELAR</span>
+            </a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'core/base_alterar_senha.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="text-primary m-0 fw-bold">Alterar Senha</h6>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.old_password.label_tag }}
+                    {{ form.old_password }}
+                </div>
+                <div class="form-group">
+                    {{ form.new_password1.label_tag }}
+                    {{ form.new_password1 }}
+                </div>
+                <div class="form-group">
+                    {{ form.new_password2.label_tag }}
+                    {{ form.new_password2 }}
+                </div>
+                <button style="margin-top:20px;" type="submit" class="btn btn-primary">Alterar Senha</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+

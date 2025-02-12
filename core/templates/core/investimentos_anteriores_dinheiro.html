@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+
+<h5 style="maring-bottom:0px;" class="text-dark mb-4">Investidor: {{ cliente.nome }}</h5>
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <i class="fa fa-money" style="font-size: 30px;color:green;margin-bottom:0px;display:inline;margin-right:5px;"></i>
+            <p style="color:green;margin-bottom:0px;display:inline;font-size:15px;"> <strong>DINHEIRO</strong></p>
+        </div>
+        <div class="card-body">
+            {% if investimentos_anteriores_dinheiro %}
+                <div style="border: 1px solid gray;padding:5px;margin-bottom:10px;border-radius:5px;">
+                    <div style="background:#ededed; padding:5px;"><span style="font-size:18px;display:inline;color:black;"><strong>Investimentos finalizados</strong></span></div>
+                    <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                        <table style="font-size:12.8px;" class="table my-0" id="dataTable">
+                            <tr>
+                                <td>Nº</td>
+                                <td>DATA INICIO</td>
+                                <td>DATA FIM</td>
+                                <td>INVESTIDO</td>
+                                <td>RENDIMENTO</td>
+                            </tr>
+                            {% for i in investimentos_anteriores_dinheiro %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ i.data_inicio }}</td>
+                                    <td>{{ i.data_fim }}</td>
+                                    <td>R$ {{ i.valor_formatado }}</td>
+                                    <td>R$ {{ i.valor_rendimento_formatado }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            {% else %}
+                <p>Investimento anterior de dinheiro inexistente</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body"><a href="{% url 'periodo' cliente.pk %}" class="btn btn-secondary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span><span class="text-white text">VOLTAR</span></a></div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">{% if is_edit %}Editar{% else %}Criar Nova{% endif %} Loja</p>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-primary btn-icon-split" type="submit"><span class="text-white-50 icon"><i class="fas fa-check"></i></span><span class="text-white text">Salvar</span></button>
+            </form>
+        </div>
+    </div>
+    {% if is_edit %}
+        <div class="card shadow" style="margin-top: 30px;">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 fw-bold">Chaves PIX</p>
+            </div>
+            <div class="card-body">
+                <a style="float:right;" href="{% url 'chave_pix_create' agencia.pk %}" class="btn btn-success btn-icon-split" role="button">
+                    <span class="text-white-50 icon"><i class="fa fa-plus"></i></span>
+                    <span class="text-white text">Adicionar chave</span>
+                </a>
+                {% if agencia.chaves_pix %}
+                    <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                        <table style="font-size:14px;" class="table my-0" id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Banco</th>
+                                    <th>CPF/CNPJ</th>
+                                    <th>Chave</th>
+                                    <th>Editar</th>
+                                    <th>Excluir</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for c in agencia.chaves_pix %}
+                                    <tr>
+                                        <td>{{ c.nome }}</td>
+                                        <td>{{ c.banco }}</td>
+                                        <td>{{ c.cpf_cnpj }}</td>
+                                        <td>{{ c.chave }}</td>
+                                        <td>
+                                            <a href="{% url 'chave_pix_edit' c.pk %}" class="btn btn-warning btn-circle ms-1" role="button" data-bs-toggle="tooltip" title="EDITAR">
+                                                <i class="fas fa-pencil-alt text-white"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'chave_pix_delete' c.pk %}" class="btn btn-danger btn-circle ms-1" role="button" data-bs-toggle="tooltip" title="EXCLUIR" onclick="return confirm('Tem certeza que deseja excluir esta chave PIX?');">
+                                                <i class="fas fa-trash text-white"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <span style="width:100%;">Nenhuma chave cadastrada!</span>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+    <div class="card shadow" style="margin-top: 30px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body"><a href="{% url 'agencia_list' %}" class="btn btn-secondary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fa fa-arrow-circle-left"></i></span><span class="text-white text">VOLTAR</span></a></div>
+    </div>
+
+{% endblock %}

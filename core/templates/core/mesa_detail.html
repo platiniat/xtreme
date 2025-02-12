@@ -1,0 +1,204 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="card shadow">
+        <div class="card-body">
+            <div style="width: 100%;max-width: 600px;display: inline-block;">
+                <h4>{{ conta.cliente.nome}}</h4>
+                <p style="margin: 0;font-size: 14px;">Conta: {{conta.numero}}</p>
+                <p style="margin: 0;font-size: 14px;">Abertura: {{conta.data_abertura}}</p>
+            </div>
+            <div style="width: 100%;max-width: 200px;display: inline-block;float: right;">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button">CARTEIRA</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'mesa_detail' conta.pk %}">DINHEIRO</a>
+                        <a class="dropdown-item" href="{% url 'cartao_detail' conta.pk %}">CARTÃO</a>
+                        <a class="dropdown-item" href="{% url 'alavancagem_detail' conta.pk %}">ALAVANCAGEM</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">DINHEIRO</p>
+        </div>
+        <div class="card-body" style="background: #172452;">
+            <div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation"><a class="nav-link active" role="tab" data-bs-toggle="tab" href="#tab-1" style="color: white;background: #172452;">RESUMO</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-2" style="color: white;background: #172452;">APORTE</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-3" style="color: white;background: #172452;">SAQUE</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-4" style="color: white;background: #172452;">TRANSFERÊNCIA</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-5" style="color: white;background: #172452;">CONCLUIR PERÍODO</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" role="tabpanel" id="tab-1">
+                        <div style="padding: 10px;background: white;margin-top: 20px;border-radius: 5px;">
+                            <div class="table-responsive" style="width: 100%;margin-left: auto;margin-right: auto;border-radius: 10px;">
+                                <table class="table table-hover table-sm" style="font-size:14px;">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 220px;"><strong>Data início</strong></td>
+                                            <td>{{ mesa.data_inicio }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Data Fim</strong></td>
+                                            <td>{{ mesa.data_fim }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Quantidade dias</strong></td>
+                                            <td>{{ mesa.dias }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 230px;"><strong>Valor investido inicial</strong></td>
+                                            <td>R$ {{ rendimentos.valor_investido_inicial_formatado }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Aportes</strong></td>
+                                            <td>R$ {{ rendimentos.valor_aportes_formatado }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Saques</strong></td>
+                                            <td>R$ {{ rendimentos.valor_saques_formatado }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Transferências efetuadas</strong></td>
+                                            <td>...</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Transferências recebidas</strong></td>
+                                            <td>...</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Total Entradas</strong></td>
+                                            <td>R$ {{ mesa.total_entrada }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Total Saidas</strong></td>
+                                            <td>R$ {{ rendimentos.valor_saques_formatado }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Rendimento do valor inicial</strong></td>
+                                            <td>R$ {{ rendimentos.rendimento_valor_inicial_investido_formatado }} ({{mesa.porcent_rend_valor_investido}}%)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Rendimento dos aportes</strong></td>
+                                            <td>R$ {{ rendimentos.rendimento_aportes }}</td>
+                                        </tr>
+                                        <tr style="font-size: 17px;">
+                                            <td><strong>Rendimento Total</strong></td>
+                                            <td><strong>R$ {{ rendimentos.rendimento_total }}</strong></td>
+                                        </tr>
+                                        <tr style="font-size: 21px;">
+                                            <td><strong>Saldo Final</strong></td>
+                                            <td><strong>R$ {{ rendimentos.fim_total }}</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <a href="{% url 'mesa_edit' mesa.pk %}" class="btn btn-warning btn-icon-split" role="button" style="margin-top:10px;">
+                                    <span class="text-white-50 icon"><i class="fas fa-pencil-alt"></i></span>
+                                    <span class="text-white text">Editar Mesa</span>
+                                </a>
+                                <a href="#" class="btn btn-primary btn-icon-split" role="button" style="margin-top:10px; float: right;">
+                                    <span class="text-white-50 icon"><i class="fas fa-check-circle"></i></span>
+                                    <span class="text-white text">Concluir Período</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="tab-2">
+                        <div class="table-responsive" style="margin-top: 20px;">
+                            <div style="padding: 10px;background: white;margin-top: 20px;border-radius: 5px;">
+                                {% if mesa.aportes_mesa %}
+                                    <table style="font-size:14px;" class="table table-hover table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th><strong>Data início</strong></th>
+                                                <th><strong>Data fim</strong></th>
+                                                <th><strong>Valor</strong></th>
+                                                <th><strong>Dias</strong></th>
+                                                <th><strong>Rendimentos</strong></th>
+                                                <th><strong>Valor Final</strong></th>
+                                                <th><strong>Excluir</strong></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for aporte in mesa.aportes_mesa %}
+                                            <tr>
+                                                <td>{{ aporte.data_aporte }}</td>
+                                                <td>{{ aporte.data_fim }}</td>
+                                                <td>R$ {{ aporte.valor_formatado }}</td>
+                                                <td>{{ aporte.dias }}</td>
+                                                <td>R$ {{aporte.rendimento_formatado }} ({{ aporte.porcent_rend }}%)</td>
+                                                <td>R$ {{ aporte.valor_final_formatado }}</td>
+                                                <td> <a href="{% url 'aporte_delete' aporte.pk %}" onclick="return confirm('Tem certeza que deseja excluir?');" class="btn btn-danger btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EXCLUIR"><i class="fas fa-trash text-white"></i></a></td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <p>Nenhum aporte registrado.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <a href="{% url 'aporte_create' mesa.pk %}" class="btn btn-success btn-icon-split" role="button" style="margin-top:10px;float: right;"><span class="text-white-50 icon"><i class="fas fa-plus"></i></span><span class="text-white text">Adicionar Aporte</span></a>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="tab-3">
+                        <div class="table-responsive" style="margin-top: 20px;">
+                            <div style="padding: 10px;background: white;margin-top: 20px;border-radius: 5px;">
+                                {% if mesa.saques_mesa %}
+                                    <table style="font-size:14px;" class="table table-hover table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th><strong>Data</strong></th>
+                                                <th><strong>Valor</strong></th>
+                                                <th><strong>Status</strong></th>
+                                                <th><strong>Excluir</strong></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for saque in mesa.saques_mesa %}
+                                            <tr>
+                                                <td>{{ saque.data }}</td>
+                                                <td>R$ {{ saque.valor_formatado }}</td>
+                                                <td>{{ saque.status }}</td>
+                                                <td> <a href="{% url 'saque_delete' saque.pk %}" onclick="return confirm('Tem certeza que deseja excluir?');" class="btn btn-danger btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EXCLUIR"><i class="fas fa-trash text-white"></i></a></td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <p>Nenhum saque registrado.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <a href="{% url 'saque_create' mesa.pk %}" class="btn btn-danger btn-icon-split" role="button" style="margin-top:10px; float: right;">
+                            <span class="text-white-50 icon"><i class="fas fa-arrow-down"></i></span>
+                            <span class="text-white text">Sacar dinheiro</span>
+                        </a>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="tab-4">
+                        ÁREA DE TRANSFERÊNCIA
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="tab-5">
+                        ÁREA DE CONCLUIR PERÍODO
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body">
+            <a href="{% url 'conta_list' mesa.conta.cliente.pk %}" class="btn btn-secondary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span><span class="text-white text">CONTA</span></a>
+        </div>
+    </div>
+
+{% endblock %}

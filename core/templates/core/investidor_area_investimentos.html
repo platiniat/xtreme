@@ -1,0 +1,340 @@
+{% extends 'core/base_investidor_area.html' %}
+{% load static %}
+
+{% block main %}
+       <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Mesa de {{cliente.nome}}</p>
+        </div>
+        <div class="card-body">
+            <div style="text-align: center;">
+                {% if periodo_dinheiro %}
+                    <div data-aos="fade" style="width: 100%;display: inline-block;max-width: 400px;margin: 5px;">
+                        <div style="background: #277827;border-radius: 10px;">
+                            <p style="margin: 0;"><i class="fa fa-money" style="font-size: 45px;color: white;margin-top: 3px;"></i></p>
+                            <p style="color: white;font-size: 22px;margin-bottom:0px;">&nbsp;<strong>Dinheiro</strong></p>
+                            <span style="color:white;font-size:14px;">{{periodo_dinheiro.data_inicio}} à {{periodo_dinheiro.data_fim}}</span>
+                            <div class="table-responsive" style="margin-top:5px;width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: orange;">pan_tool</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>APORTES SOLICITADOS</strong><br><span style="font-size: 15px;"><strong>R$ {{periodo_dinheiro.soma_solicitacoes_investimentos}}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: blue;">check_circle</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>INVESTIMENTO CONFIRMADO</strong><br><span style="font-size: 15px;"><strong>R$ {{periodo_dinheiro.soma_investimentos}}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: #325e2e;">monetization_on</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>RENDIMENTOS</strong><br><span style="font-size: 15px;"><strong>R$ {{periodo_dinheiro.soma_rendimentos}}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: orange;">pan_tool</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>SOLICITAÇÃO RENDIMENTOS</strong><br><span style="font-size: 15px;"><strong>R$ {{periodo_dinheiro.soma_solicitacoes_retiradas}}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: brown;">check_circle</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>RENDIMENTO RETIRADO</strong><br><span style="font-size: 15px;"><strong>R$ {{periodo_dinheiro.soma_retiradas}}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div><a href="#" class="btn btn-success btn-icon-split" role="button" style="margin-bottom: 10px;"><span class="text-white-50 icon"><i class="fas fa-info-circle"></i></span><span class="text-white text">Detalhes</span></a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div data-aos="fade" style="background: #277827;border-radius: 10px;width: 100%;display: inline-block;max-width: 400px;margin: 5px;">
+                        <div style="background: #277827;border-radius: 10px;">
+                            <p style="margin: 0;"><i class="fa fa-money" style="font-size: 45px;color: white;margin-top: 3px;"></i></p>
+                            <p style="color: white;font-size: 22px;margin-bottom:0px;">&nbsp;<strong>Dinheiro</strong></p><br>
+                            <div class="table-responsive" style="margin-top:5px;width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;margin-bottom:200px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: orange;">pan_tool</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><span style=";font-size:14px;">NENHUM PERÍODO DE DINHEIRO ABERTO PARA O INVESTIDOR.</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if cartoes_abertos %}
+                    <div data-aos="fade" style="width: 100%;display: inline-block;max-width: 400px;margin: 5px;">
+                        <div style="background: brown;border-radius: 10px;">
+                            <p style="margin: 0;"><i class="fa fa-credit-card" style="font-size: 45px;color: white;margin-top: 3px;"></i></p>
+                            <p style="color: white;font-size: 22px;margin-bottom:0px;">&nbsp;<strong>Cartão</strong></p>
+                            <span style="color:white;font-size:14px;">CARTÕES ABERTOS</span>
+                            <div class="table-responsive" style="margin-top:5px;width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: orange;">pan_tool</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>CARTAO</strong><br><span style="font-size: 15px;"><strong>R$ {{periodo_dinheiro.soma_solicitacoes_investimentos}}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: blue;">check_circle</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>INVESTIMENTO CONFIRMADO</strong><br><span style="font-size: 15px;"><strong>R$ {{periodo_dinheiro.soma_investimentos}}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: #325e2e;">monetization_on</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>RENDIMENTOS</strong><br><span style="font-size: 15px;"><strong>R$ {{periodo_dinheiro.soma_rendimentos}}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: orange;">pan_tool</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>SOLICITAÇÃO RETIRADA</strong><br><span style="font-size: 15px;"><strong>R$ {{periodo_dinheiro.soma_solicitacoes_retiradas}}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: brown;">check_circle</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>RETIRADA CONFIRMADA</strong><br><span style="font-size: 15px;"><strong>R$ {{periodo_dinheiro.soma_retiradas}}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div><a href="#" class="btn btn-success btn-icon-split" role="button" style="margin-bottom: 10px;"><span class="text-white-50 icon"><i class="fas fa-info-circle"></i></span><span class="text-white text">Detalhes</span></a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div data-aos="fade" style="background: brown;border-radius: 10px;width: 100%;display: inline-block;max-width: 400px;margin: 5px;">
+                        <div style="background: brown;border-radius: 10px;">
+                            <p style="margin: 0;"><i class="fa fa-credit-card" style="font-size: 45px;color: white;margin-top: 3px;"></i></p>
+                            <p style="color: white;font-size: 22px;margin-bottom:0px;">&nbsp;<strong>Cartão</strong></p><br>
+                            <div class="table-responsive" style="margin-top:5px;width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;margin-bottom:200px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: orange;">pan_tool</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><span style=";font-size:14px;">NENHUM CARTÃO INVESTIDO.</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if periodo_alavancagem %}
+                    <div data-aos="fade" data-aos-delay="400" style="width: 100%;display: inline-block;max-width: 400px;margin: 5px;">
+                        <div style="background: #4e61a5;border-radius: 10px;">
+                            <p style="margin: 0;"><i class="fa fa-rocket" style="font-size: 45px;color: white;margin-top: 3px;"></i></p>
+                            <p style="margin-bottom:0px;color: white;font-size: 22px;">&nbsp;<strong>Alavancagem</strong></p>
+                            <span style="color:white;font-size:14px;">{{periodo_alavancagem.data_inicio}} à {{periodo_alavancagem.data_fim}}</span>
+                            <div class="table-responsive" style="margin-top:5px;width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: orange;">pan_tool</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>SOLICITAÇÃO INVESTIMENTO</strong><br><span style="font-size: 15px;"><strong>R$ {{ conta.dinheiro_investido }}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: blue;">check_circle</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>INVESTIMENTO CONFIRMADO</strong><br><span style="font-size: 15px;"><strong>R$ {{ conta.dinheiro_investido }}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: #325e2e;">monetization_on</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>RENDIMENTOS</strong><br><span style="font-size: 15px;"><strong>R$ {{ conta.dinheiro_investido }}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: orange;">pan_tool</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>SOLICITAÇÃO RETIRADA</strong><br><span style="font-size: 15px;"><strong>R$ {{ conta.dinheiro_investido }}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: brown;">check_circle</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>RETIRADA CONFIRMADA</strong><br><span style="font-size: 15px;"><strong>R$ {{ conta.dinheiro_rendimentos }}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div><a href="#" class="btn btn-info btn-icon-split" role="button" style="margin-bottom: 10px;"><span class="text-white-50 icon"><i class="fas fa-info-circle"></i></span><span class="text-white text">Detalhes</span></a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div data-aos="fade" style="width: 100%;display: inline-block;max-width: 400px;margin: 5px;">
+                        <div style="background: #4e61a5;border-radius: 10px;">
+                            <p style="margin: 0;"><i class="fa fa-rocket" style="font-size: 45px;color: white;margin-top: 3px;"></i></p>
+                            <p style="color: white;font-size: 22px;margin-bottom:0px;">&nbsp;<strong>Alavancagem</strong></p><br>
+                            <div class="table-responsive" style="margin-top:5px;width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;margin-bottom:200px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: orange;">pan_tool</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><span style=";font-size:14px;">NENHUM PERÍODO DE ALAVANCAGEM ABERTO PARA O INVESTIDOR.</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Minhas Solicitações</p>
+        </div>
+        <div class="card-body" style="#">
+
+            {% if solicitacoes_investimentos %}
+            <span>SOLICITAÇÕES DE APORTES</span>
+                <div class="table-responsive" style="font-size:14px;margin-top:5px;width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th style="width: 50px;padding: 0;">Nº</th>
+                                <th>VALOR</th>
+                                <th>COMPROVANTE</th>
+                                <th>EDITAR</th>
+                                <th>EXCLUIR</th>
+                            </tr>
+                            {% for s in solicitacoes_investimentos %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>R$ {{ s.valor_formatado }}</td>
+                                    <td>comprovante</td>
+                                    <td><a href="{% url 'solicitacao_investimento_edit' s.pk %}" class="btn btn-warning btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EDITAR"><i class="fas fa-pencil-alt text-white"></i></a></td>
+                                    <td>
+                                        <a href="{% url 'solicitacao_investimento_delete' s.pk %}" onclick="return confirm('Tem certeza que deseja excluir?');" class="btn btn-danger btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EXCLUIR"><i class="fas fa-trash text-white"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+            <a href="{% url 'solicitacao_investimento_create' %}" class="btn btn-success btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-line-chart"></i></span><span class="text-white text">FAZER UM APORTE</span></a>
+            <hr>
+            {% if solicitacoes_retiradas_rendimentos %}
+            <span>SOLICITAÇÕES DE RENDIMENTOS</span>
+                <div class="table-responsive" style="font-size:14px;margin-top:5px;width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th style="width: 50px;padding: 0;">Nº</th>
+                                <th>VALOR</th>
+                                <th>CHAVE PIX</th>
+                                <th>BANCO PIX</th>
+                                <th>TITULAR PIX</th>
+                                <th>EDITAR</th>
+                                <th>EXCLUIR</th>
+                            </tr>
+                            {% for s in solicitacoes_retiradas_rendimentos %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>R$ {{ s.valor_formatado }}</td>
+                                    <td>{{ s.chave_pix}}</td>
+                                    <td>{{ s.banco_pix}}</td>
+                                    <td>{{ s.titular_pix}}</td>
+                                    <td><a href="{% url 'solicitacao_retirada_rendimento_edit' s.pk %}" class="btn btn-warning btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EDITAR"><i class="fas fa-pencil-alt text-white"></i></a></td>
+                                    <td>
+                                        <a href="{% url 'solicitacao_retirada_rendimento_delete' s.pk %}" onclick="return confirm('Tem certeza que deseja excluir?');" class="btn btn-danger btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="EXCLUIR"><i class="fas fa-trash text-white"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <a href="{% url 'solicitacao_retirada_rendimento_create' %}" class="btn btn-light btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fa fa-arrow-down"></i></span><span class="text">SOLICITAR RETIRADA DE RENDIMENTO</span></a>
+            {% endif %}
+        </div>
+
+    </div>
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body" style="text-align:center;">
+            <a style="margin:10px;" href="{% url 'index' %}" class="btn btn-secondary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span><span class="text-white text">VOLTAR</span></a>
+            <a style="margin:10px;" href="#" class="btn btn-primary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fa fa-line-chart"></i></span><span class="text-white text">HISTÓRICO</span></a>
+        </div>
+
+    </div>
+{% endblock %}

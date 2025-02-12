@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Criar Novo Aporte para {{ mesa_cartao }}</p>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-primary btn-icon-split" type="submit">
+                    <span class="text-white-50 icon"><i class="fas fa-check"></i></span>
+                    <span class="text-white text">Salvar</span>
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="card shadow" style="margin-top: 30px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body">
+            <a href="{% url 'mesa_cartao' mesa_cartao.conta.pk %}" class="btn btn-secondary btn-icon-split" role="button">
+                <span class="text-white-50 icon"><i class="fa fa-arrow-circle-left"></i></span>
+                <span class="text-white text">VOLTAR</span>
+            </a>
+        </div>
+    </div>
+{% endblock %}

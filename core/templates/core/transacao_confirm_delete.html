@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Confirmar Exclusão da transação</p>
+        </div>
+        <div class="card-body">
+            <p>Você tem certeza que deseja excluir a transação de R$ {{ aporte.valor }} feito em {{ transacao.data_inicio }}?</p>
+
+            {% if error_message %}
+                <div class="alert alert-danger">{{ error_message }}</div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="password" class="form-label">Digite sua senha:</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body">
+            <a href="{% url 'mesa_dinheiro' transacao.mesa_dinheiro.conta.pk %}" class="btn btn-secondary btn-icon-split" role="button" style="margin-top: 10px;">
+                <span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span>
+                <span class="text-white text">CANCELAR</span>
+            </a>
+        </div>
+    </div>
+{% endblock %}

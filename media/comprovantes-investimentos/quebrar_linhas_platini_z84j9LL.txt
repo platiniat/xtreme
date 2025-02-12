@@ -1,0 +1,41 @@
+import pandas as pd
+
+arquivo_entrada = 'arquivo_grande.csv'  # Caminho do arquivo CSV original
+linha_inicial = 19000000  # Linha inicial
+quantidade_linhas = 1000000
+linha_final = linha_inicial + quantidade_linhas  # Linha final (inclusive)
+prefixo_saida = 'subarquivo'  # Prefixo para os novos arquivos
+
+
+def dividir_csv_por_intervalo_chunks(arquivo_entrada, linha_inicial, linha_final, prefixo_saida, chunk_size=quantidade_linhas):
+    # Tentar carregar o arquivo em pedaços (chunks) com uma codificação mais flexível e delimitador correto
+    try:
+        # Usar 'on_bad_lines' para lidar com linhas malformadas
+        chunk_iter = pd.read_csv(arquivo_entrada, chunksize=chunk_size, encoding='ISO-8859-1', delimiter=';', on_bad_lines='skip')
+    except Exception as e:
+        print(f"Erro ao carregar o arquivo: {e}")
+        return
+    
+    # Processar os chunks
+    linha_atual = 0
+    for i, chunk in enumerate(chunk_iter):
+        # Verifica se o intervalo está dentro do chunk
+        if linha_atual + len(chunk) > linha_inicial and linha_atual < linha_final:
+            # Determina o intervalo de linhas no chunk
+            intervalo_inicio = max(0, linha_inicial - linha_atual)
+            intervalo_fim = min(len(chunk), linha_final - linha_atual)
+
+            # Pega o subconjunto de linhas dentro do intervalo
+            df_subconjunto = chunk.iloc[intervalo_inicio:intervalo_fim]
+
+            # Salva o novo arquivo CSV com o intervalo
+            arquivo_saida = f"{prefixo_saida}_{linha_inicial+1}_{linha_final}.csv"
+            df_subconjunto.to_csv(arquivo_saida, index=False, encoding='ISO-8859-1')
+            print(f"Novo arquivo gerado: {arquivo_saida}")
+            break  # Após processar o intervalo, não precisa continuar o loop
+
+        # Atualiza a linha atual para o próximo chunk
+        linha_atual += len(chunk)
+
+# Chamar a função para dividir o arquivo
+dividir_csv_por_intervalo_chunks(arquivo_entrada, linha_inicial, linha_final, prefixo_saida)

@@ -1,0 +1,55 @@
+{% extends 'core/base_investidor_area.html' %}
+{% load static %}
+
+{% block main %}
+
+<h5 class="text-dark mb-4">Investimentos de dinheiro de {{ cliente.nome }}</h5>
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <i class="fa fa-money" style="font-size: 45px;color:green;margin-bottom:0px;"></i>
+            <p style="color:green;"> <strong>DINHEIRO</strong></p>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                <table style="font-size:14px;" class="table my-0" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>Nº</th>
+                            <th>Início</th>
+                            <th>Fim</th>
+                            <th>Sócio</th>
+                            <th>Valor</th>
+                            <th>% rendimentos</th>
+                            <th>Rendimentos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in investimentos %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ i.data_inicio|date:"d/m/Y" }}</td>
+                                <td>{{ i.data_fim|date:"d/m/Y" }}</td>
+                                <td>{{ i.socio }}</td>
+                                <td>R$ {{ i.valor_formatado }}</td>
+                                <td>{{ i.porcent_rend_valor }}%</td>
+                                <td>R$ {{ i.rendimentos }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="7">Nenhum investimento de dinheiro encontrado. </td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body"><a href="{% url 'investidor_area_investimentos' %}" class="btn btn-secondary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span><span class="text-white text">VOLTAR</span></a></div>
+    </div>
+
+{% endblock %}

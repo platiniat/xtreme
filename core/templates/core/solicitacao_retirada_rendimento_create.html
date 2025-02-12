@@ -1,0 +1,30 @@
+{% extends 'core/base_investidor_area.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Solicitar Retirada de Rendimento (máximo R$ {{ disponivel_formatado }})</p>
+
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">SOLICITAR</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body">
+            <a href="{% url 'investidor_area_investimentos' %}" class="btn btn-secondary btn-icon-split" role="button">
+                <span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span>
+                <span class="text-white text">VOLTAR</span>
+            </a>
+        </div>
+    </div>
+{% endblock %}

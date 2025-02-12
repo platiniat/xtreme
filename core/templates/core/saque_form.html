@@ -1,0 +1,38 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Realizar saque</p>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="data" class="form-label">Data:</label>
+                    <input type="date" id="data" name="data" class="form-control" value="{{ data }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="valor" class="form-label">Valor do Saque:</label>
+                    <input type="text" id="valor" name="valor" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Confirmar Saque</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body">
+            <a href="{% url 'mesa_detail' mesa.conta.pk %}" class="btn btn-secondary btn-icon-split" role="button">
+                <span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span>
+                <span class="text-white text">VOLTAR</span>
+            </a>
+        </div>
+    </div>
+{% endblock %}

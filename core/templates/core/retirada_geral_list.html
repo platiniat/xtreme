@@ -1,0 +1,101 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+
+    {% if solicitacoes %}
+        <div class="card shadow" style="margin-bottom:30px;">
+            <div class="card-header py-3">
+                <i class="fa fa-hand-paper" style="font-size: 45px;color:orange;margin-bottom:0px;"></i>
+                <p style="color:brown;margin-bottom:0px;"> <strong>SOLICITAÇÕES DE RETIRADAS</strong></p>
+            </div>
+            <div class="card-body">
+                <a href="#" class="btn btn-primary btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="SOLICITAÇÕES"><i class="fas fa-check text-white"></i></a>
+            </div>
+        </div>
+    {% endif %}
+    <div class="card shadow">
+            <div class="card-header py-3">
+                <i class="fas fa-cash-register" style="font-size: 45px;color:red;margin-bottom:0px;"></i>
+                <p style="color:brown;margin-bottom:0px;"> <strong>RETIRADAS CONFIRMADAS</strong></p>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                    <table style="font-size:14px;" class="table my-0" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>Nº</th>
+                                <th>Investidor</th>
+                                <th>Solicitado</th>
+                                <th>Retirado</th>
+                                <th>Valor</th>
+                                <th>Comprov.</th>
+                                <th>Chave pix</th>
+                                <th>Banco</th>
+                                <th>Titular</th>
+                                <th>Aprovação</th>
+                                <th>Mesa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in retiradas %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ r.cliente.nome }}</td>
+                                    <td>
+                                        {% if r.data_solicitacao %}
+                                            {{ r.data_solicitacao }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ r.data_retirada }}</td>
+                                    <td>R$ {{ r.valor_formatado }}</td>
+                                    <td>
+                                        {% if r.comprovante %}
+                                            <a href="{{ r.comprovante.url }}" download>
+                                                <i class="fas fa-download" style="font-size: 20px; color: blue;"></i> <!-- Ícone de download -->
+                                            </a>
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if r.chave_pix %}
+                                            {{ r.chave_pix }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if r.banco_pix %}
+                                            {{ r.banco_pix }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if r.titular_pix %}
+                                            {{ r.titular_pix }}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ r.aprovador }}</td>
+                                    <td>
+                                        <a href="{% url 'conta_list' r.cliente.pk %}" class="btn btn-success btn-circle ms-1" role="button" data-bs-toggle="tooltip" data-bss-tooltip="" title="VER MESA"><i class="fas fa-table text-white"></i></a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="8">Nenhuma retirada encontrada. </td>
+                                </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body"><a href="{% url 'index' %}" class="btn btn-secondary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span><span class="text-white text">VOLTAR</span></a></div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,188 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+    {% if sem_conta %}
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 fw-bold">Cadastre uma conta para {{ cliente.nome }} clicando no botão abaixo</p>
+                    <a href="{% url 'conta_create' cliente.pk %}" class="btn btn-success btn-icon-split" role="button" style="margin-top:20px;"><span class="text-white-50 icon"><i class="fas fa-plus"></i></span><span class="text-white text">NOVA CONTA</span></a>
+            </div>
+        </div>
+    {% else %}
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 fw-bold">Informações do Cadastro </p>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <tbody>
+                            <tr style="background: gray;">
+                                <td style="background: #a0a0a0;color: white;">Nome</td>
+                                <td style="background: #a0a0a0;color: white;"><strong>Código</strong></td>
+                                <td style="background: #a0a0a0;color: white;"><strong>Abertura</strong></td>
+                                <td style="background: #a0a0a0;color: white;"><strong>Loja</strong></td>
+                            </tr>
+                            <tr>
+                                <td>{{conta.cliente.nome}}</td>
+                                <td>{{conta.numero}}</td>
+                                <td>{{conta.data_abertura}}</td>
+                                <td>{{conta.agencia.numero}} - {{conta.agencia.nome}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card shadow" style="margin-top: 20px;">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 fw-bold">Em andamento</p>
+            </div>
+            <div class="card-body">
+                <div style="text-align: center;">
+                    <div data-aos="fade" style="width: 100%;display: inline-block;max-width: 280px;margin: 5px;">
+                        <div style="background: #277827;border-radius: 10px;">
+                            <p style="margin: 0;"><i class="fa fa-money" style="font-size: 45px;color: white;margin-top: 3px;"></i></p>
+                            <p style="color: white;font-size: 22px;">&nbsp;<strong>Dinheiro</strong></p>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: #325e2e;">monetization_on</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>INVESTIDO</strong><br><span style="font-size: 15px;"><strong>R$ {{ conta.dinheiro_investido }}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: #325e2e;">monetization_on</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>RENDIMENTO</strong><br><span style="font-size: 15px;"><strong>R$ {{ conta.dinheiro_rendimentos }}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div><a href="{% url 'dinheiro_list' conta.cliente.pk %}" class="btn btn-success btn-icon-split" role="button" style="margin-bottom: 10px;"><span class="text-white-50 icon"><i class="fas fa-info-circle"></i></span><span class="text-white text">Detalhes</span></a>
+                        </div>
+                    </div>
+                    <div data-aos="fade" data-aos-delay="200" style="width: 100%;display: inline-block;max-width: 280px;margin: 5px;">
+                        <div style="background: #ae6b3b;border-radius: 10px;">
+                            <p style="margin: 0;"><i class="fa fa-credit-card" style="font-size: 45px;color: white;margin-top: 3px;"></i></p>
+                            <p style="color: white;font-size: 22px;">&nbsp;<strong>Cartão</strong></p>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: #325e2e;">monetization_on</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>INVESTIDO</strong><br><span style="font-size: 15px;"><strong>R$ {{ conta.cartao_investido }}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: #325e2e;">monetization_on</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>RENDIMENTO</strong> <span style="font-size:11px;"> (R${{ conta.cartao_rendimentos }})</span><br><span style="font-size: 15px;"><strong>R$ {{ conta.cartao_rendimentos_mes }} (mês)</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div><a href="{% url 'cartao_list' conta.cliente.pk %}" class="btn btn-warning btn-icon-split" role="button" style="margin-bottom: 10px;"><span class="text-white-50 icon"><i class="fas fa-info-circle"></i></span><span class="text-white text">Detalhes</span></a>
+                        </div>
+                    </div>
+                    <div data-aos="fade" data-aos-delay="400" style="width: 100%;display: inline-block;max-width: 280px;margin: 5px;">
+                        <div style="background: #4e61a5;border-radius: 10px;">
+                            <p style="margin: 0;"><i class="fa fa-rocket" style="font-size: 45px;color: white;margin-top: 3px;"></i></p>
+                            <p style="color: white;font-size: 22px;">&nbsp;<strong>Alavancagem</strong></p>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: #325e2e;">monetization_on</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>INVESTIDO</strong><br><span style="font-size: 15px;"><strong>R$ {{ conta.alavancagem_investido }}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: #325e2e;">monetization_on</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>RENDIMENTO</strong><br><span style="font-size: 15px;"><strong>R$ {{ conta.alavancagem_rendimentos }}</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div><a href="{% url 'alavancagem_list' conta.cliente.pk %}" class="btn btn-info btn-icon-split" role="button" style="margin-bottom: 10px;"><span class="text-white-50 icon"><i class="fas fa-info-circle"></i></span><span class="text-white text">Detalhes</span></a>
+                        </div>
+                    </div>
+                    <div data-aos="fade" data-aos-delay="600" style="width: 100%;display: inline-block;max-width: 280px;margin: 5px;">
+                        <div style="background: #959595;border-radius: 10px;">
+                            <p style="margin: 0;"><i class="fas fa-cash-register" style="font-size: 45px;color: white;margin-top: 3px;"></i></p>
+                            <p style="color: white;font-size: 22px;">&nbsp;<strong>Retirada</strong></p>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: #325e2e;">monetization_on</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>DISPONÍVEL</strong><br><span style="font-size: 15px;"><strong>R$ ---</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive" style="width: 90%;margin-left: auto;margin-right: auto;border-radius: 5px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;padding: 0;"><i class="material-icons" style="font-size: 45px;width: 100%;color: #325e2e;">monetization_on</i></td>
+                                            <td style="text-align: left;font-size: 13px;"><strong>CONFIRMADAS</strong><br><span style="font-size: 15px;"><strong>R$ ---</strong></span></td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div><a href="{% url 'retirada_list' conta.cliente.pk %}" class="btn btn-secondary btn-icon-split" role="button" style="margin-bottom: 10px;"><span class="text-white-50 icon"><i class="fas fa-info-circle"></i></span><span class="text-white text">Detalhes</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endif %}
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">FINALIZAR PERÍODO E INICIAR NOVO</p>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                <table style="font-size:14px;" class="table my-0" id="dataTable">
+                    <tr>
+                        <td><a style="font-size:15px;" href="{% url 'finalizar_periodo_novo' conta.cliente.pk %}" class="btn btn-danger btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-arrow-right"></i></span><span class="text-white text">FINALIZAR PERÍODO</span></a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body" style="text-align:center;">
+            <a style="margin:10px;" href="{% url 'cliente_list' %}" class="btn btn-secondary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span><span class="text-white text">VOLTAR</span></a>
+            <a style="margin:10px;" href="{% url 'investidor_investimento_list' conta.cliente.pk %}" class="btn btn-primary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fa fa-line-chart"></i></span><span class="text-white text">HISTÓRICO DE INVESTIMENTOS</span></a>
+            <a style="margin:10px;" href="{% url 'investidor_retirada_list' conta.cliente.pk %}" class="btn btn-warning btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-arrow-down"></i></span><span class="text-white text">HISTÓRICO DE RETIRADAS</span></a>
+        </div>
+
+    </div>
+{% endblock %}

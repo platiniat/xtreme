@@ -1,0 +1,72 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block main %}
+
+<h4 class="text-dark mb-4" xmlns="http://www.w3.org/1999/html">Finalizar Período de {{ periodo.cliente.nome }}</h4>
+    <div class="card shadow" style="margin-bottom:10px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Dados do novo período</p>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <table>
+                    <tr>
+                        <td style="padding:5px;">Será reinvestido</td>
+                        <td style="padding:5px;"><span style="font-size:18px;color:green;"><strong>R$ {{periodo.reinvestir_formatado }}</strong></span></td>
+                    </tr>
+                    <tr>
+                        <td style="padding:5px;">Será retirado</td>
+                        <td style="padding:5px;"><span style="font-size:18px;color:red;"><strong>R$ {{sera_retirado}}</strong></span></td>
+                    </tr>
+                </table>
+                {{ form.as_p }}
+                <button class="btn btn-primary btn-icon-split" type="submit"><span class="text-white-50 icon"><i class="fas fa-check"></i></span><span class="text-white text">CONFIRMAR</span></button>
+            </form>
+        </div>
+    </div>
+    <div class="card shadow" style="margin-top: 20px;">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Ações</p>
+        </div>
+        <div class="card-body"><a href="{% url 'periodo' periodo.cliente.pk %}" class="btn btn-secondary btn-icon-split" role="button"><span class="text-white-50 icon"><i class="fas fa-arrow-left"></i></span><span class="text-white text">VOLTAR</span></a></div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+        // Salvar a posição de rolagem antes do recarregamento
+        window.onbeforeunload = function() {
+            localStorage.setItem("scrollPosition", window.scrollY);
+        };
+
+        // Restaurar a posição de rolagem imediatamente após o carregamento da página
+        document.addEventListener("DOMContentLoaded", function() {
+            const scrollPosition = localStorage.getItem("scrollPosition");
+            if (scrollPosition) {
+                // Adiciona um pequeno atraso para garantir que a rolagem aconteça sem animação
+                setTimeout(function() {
+                    window.scrollTo(0, parseInt(scrollPosition));
+                    localStorage.removeItem("scrollPosition");
+
+                    // Torna o corpo da página visível após a rolagem
+                    document.body.style.visibility = 'visible';
+                }, 0); // Delay de 0 para a rolagem ser instantânea
+            } else {
+                // Caso não haja rolagem salva, exibe a página normalmente
+                document.body.style.visibility = 'visible';
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block estilo %}
+    <style>
+        /* Torna a página invisível enquanto a rolagem está sendo ajustada */
+        body {
+            visibility: hidden; /* Torna o conteúdo invisível até que a rolagem seja ajustada */
+        }
+    </style>
+{% endblock %}
